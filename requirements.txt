@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+httpx
+python-dotenv
+jinja2
+python-multipart
+weasyprint
+xhtml2pdf
