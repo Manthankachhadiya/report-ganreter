@@ -1,3 +1,6 @@
+Of course. Here is the code modified to have one single, large input box for the weight details.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -457,13 +460,6 @@
                                 <input type="date" id="date" name="date">
                             </div>
                             <div class="form-group">
-                                <label for="total_weight">
-                                    <i class="fas fa-weight"></i>
-                                    Total Weight (kg)
-                                </label>
-                                <input type="number" step="0.01" id="total_weight" name="total_weight" placeholder="0.00">
-                            </div>
-                            <div class="form-group">
                                 <label for="bill_number">
                                     <i class="fas fa-file-invoice"></i>
                                     Bill Number
@@ -472,6 +468,18 @@
                             </div>
                         </div>
                         
+                        <h3 style="margin: 30px 0 20px 0; color: #2c3e50;">
+                            <i class="fas fa-weight-hanging"></i>
+                            Weight Details
+                        </h3>
+                        <div class="form-group">
+                            <label for="weight_details">
+                                <i class="fas fa-file-alt"></i>
+                                Enter all weight measurements
+                            </label>
+                            <textarea id="weight_details" name="weight_details" placeholder="e.g., Gross: 1500kg, Tare: 20kg, Net: 1480kg, Moisture: 15kg..."></textarea>
+                        </div>
+
                         <h3 style="margin: 30px 0 20px 0; color: #2c3e50;">
                             <i class="fas fa-boxes"></i>
                             Bale Details
@@ -609,7 +617,6 @@
                         <span>Report generated successfully! Review the details below.</span>
                     </div>
                     
-                    <!-- Report Information Section -->
                     <div class="report-info">
                         <h3>
                             <i class="fas fa-info-circle"></i>
@@ -639,13 +646,6 @@
                         </div>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                        <div class="stats-card">
-                            <div class="stats-number" id="total-weight-display">0</div>
-                            <div class="stats-label">Total Weight (kg)</div>
-                        </div>
-                    </div>
-
                     <table class="data-table" id="preview-table">
                         <thead>
                             <tr>
@@ -657,8 +657,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Dynamic content will be inserted here -->
-                        </tbody>
+                            </tbody>
                     </table>
 
                     <div class="quick-actions">
@@ -694,7 +693,6 @@
         </button>
     </div>
 
-    <!-- Hidden form for PDF generation -->
     <form method="post" action="/generate-pdf" id="pdf-form" style="display: none;">
         <input type="hidden" name="report_data" id="report_data">
     </form>
@@ -739,9 +737,6 @@
             document.getElementById('vehicle-display').textContent = data.vehicle || '-';
             document.getElementById('date-display').textContent = data.date || '-';
             document.getElementById('bill-number-display').textContent = data.bill_number || '-';
-            
-            // Update stats
-            document.getElementById('total-weight-display').textContent = data.total_weight || 0;
             
             // Update table
             const tbody = document.querySelector('#preview-table tbody');
@@ -796,7 +791,6 @@
         document.getElementById('party_name').value = currentReportData.party_name || '';
         document.getElementById('vehicle').value = currentReportData.vehicle || '';
         document.getElementById('date').value = currentReportData.date || '';
-        document.getElementById('total_weight').value = currentReportData.total_weight || '';
         document.getElementById('bill_number').value = currentReportData.bill_number || '';
         
         // Bale 1 data
@@ -891,8 +885,9 @@
 
         // Initialize with sample data if available
         {% if parsed_data %}
-        showReportPreview({{ parsed_data | tojson }});
+        showReportPreview({{ parsed_data |tojson }});
         {% endif %}
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95cfa211cd90ff68',t:'MTc1MjE0NjAyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>          
+</html>
+```

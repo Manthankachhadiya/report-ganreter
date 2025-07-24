@@ -38,7 +38,6 @@ Extract the following fields and return JSON in **this exact format**:
   "party_name": "string",
   "vehicle": "string",
   "date": "DD/MM/YYYY",
-  "total_weight": float,
   "bill_number": int,
   "bales": {{
     "bale1": {{
@@ -127,7 +126,6 @@ If any value is missing, set it to 0.0.
             "party_name": fallback_data.get("party_name", "Unknown Party"),
             "vehicle": fallback_data.get("vehicle", "Unknown Vehicle"),
             "date": fallback_data.get("date", "01/01/2025"),
-            "total_weight": fallback_data.get("total_weight", 0.0),
             "bill_number": fallback_data.get("bill_number", 0),
             "bales": {
                 "bale1": {k: 0.0 for k in ["bale_weight", "tar_raffiya", "pvc", "non_pet", "non_food", "metal", "colour", "big_jar", "big_jar_mix", "d_grade", "dirty_bottle", "moisture"]},
@@ -162,7 +160,6 @@ async def update_json(
     party_name: str = Form(...),
     vehicle: str = Form(...),
     date: str = Form(...),
-    total_weight: float = Form(...),
     bill_number: int = Form(...),
     bale1_bale_weight: float = Form(default=0.0),
     bale1_tar_raffiya: float = Form(default=0.0),
@@ -194,7 +191,6 @@ async def update_json(
         "party_name": party_name,
         "vehicle": vehicle,
         "date": date,
-        "total_weight": total_weight,
         "bill_number": bill_number,
         "bales": {
             "bale1": {
@@ -278,7 +274,6 @@ async def generate_pdf(request: Request, report_data: str = Form(...)):
             "party_name": raw_report.get("party_name", "Unknown Party"),
             "vehicle": raw_report.get("vehicle", "Unknown Vehicle"),
             "date": raw_report.get("date", "01/01/2025"),
-            "total_weight": raw_report.get("total_weight", 0.0),
             "bill_number": raw_report.get("bill_number", 0),
             "bale1": raw_report["bales"].get("bale1", {}),
             "bale2": raw_report["bales"].get("bale2", {}),
