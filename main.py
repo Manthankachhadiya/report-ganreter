@@ -39,6 +39,7 @@ Extract the following fields and return JSON in **this exact format**:
   "vehicle": "string",
   "date": "DD/MM/YYYY",
   "bill_number": int,
+  "weight_details_text": "string",
   "bales": {{
     "bale1": {{
       "bale_weight": float,
@@ -73,6 +74,7 @@ Extract the following fields and return JSON in **this exact format**:
 
 Only return valid JSON — no extra text, comments, or explanations.
 If any value is missing, set it to 0.0.
+For weight_details_text, extract any weight-related information mentioned in the input.
 """
 
     headers = {
@@ -127,6 +129,7 @@ If any value is missing, set it to 0.0.
             "vehicle": fallback_data.get("vehicle", "Unknown Vehicle"),
             "date": fallback_data.get("date", "01/01/2025"),
             "bill_number": fallback_data.get("bill_number", 0),
+            "weight_details_text": fallback_data.get("weight_details_text", ""),
             "bales": {
                 "bale1": {k: 0.0 for k in ["bale_weight", "tar_raffiya", "pvc", "non_pet", "non_food", "metal", "colour", "big_jar", "big_jar_mix", "d_grade", "dirty_bottle", "moisture"]},
                 "bale2": {k: 0.0 for k in ["bale_weight", "tar_raffiya", "pvc", "non_pet", "non_food", "metal", "colour", "big_jar", "big_jar_mix", "d_grade", "dirty_bottle", "moisture"]},
@@ -161,6 +164,7 @@ async def update_json(
     vehicle: str = Form(...),
     date: str = Form(...),
     bill_number: int = Form(...),
+    weight_details: str = Form(default=""),
     bale1_bale_weight: float = Form(default=0.0),
     bale1_tar_raffiya: float = Form(default=0.0),
     bale1_pvc: float = Form(default=0.0),
@@ -192,6 +196,7 @@ async def update_json(
         "vehicle": vehicle,
         "date": date,
         "bill_number": bill_number,
+        "weight_details_text": weight_details,
         "bales": {
             "bale1": {
                 "bale_weight": bale1_bale_weight,
@@ -275,6 +280,7 @@ async def generate_pdf(request: Request, report_data: str = Form(...)):
             "vehicle": raw_report.get("vehicle", "Unknown Vehicle"),
             "date": raw_report.get("date", "01/01/2025"),
             "bill_number": raw_report.get("bill_number", 0),
+            "weight_details_text": raw_report.get("weight_details_text", ""),
             "bale1": raw_report["bales"].get("bale1", {}),
             "bale2": raw_report["bales"].get("bale2", {}),
         }
