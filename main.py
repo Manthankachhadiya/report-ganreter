@@ -165,6 +165,7 @@ async def update_json(
     date: str = Form(...),
     bill_number: int = Form(...),
     weight_details: str = Form(default=""),
+    photos: str = Form(default="[]"),  # JSON string of photos
     bale1_bale_weight: float = Form(default=0.0),
     bale1_tar_raffiya: float = Form(default=0.0),
     bale1_pvc: float = Form(default=0.0),
@@ -190,6 +191,12 @@ async def update_json(
     bale2_dirty_bottle: float = Form(default=0.0),
     bale2_moisture: float = Form(default=0.0),
 ):
+    # Parse photos JSON string
+    try:
+        photos_data = json.loads(photos) if photos else []
+    except:
+        photos_data = []
+    
     # Construct the updated JSON
     parsed_data = {
         "party_name": party_name,
@@ -197,6 +204,7 @@ async def update_json(
         "date": date,
         "bill_number": bill_number,
         "weight_details_text": weight_details,
+        "photos": photos_data,
         "bales": {
             "bale1": {
                 "bale_weight": bale1_bale_weight,
@@ -281,9 +289,18 @@ async def generate_pdf(request: Request, report_data: str = Form(...)):
             "date": raw_report.get("date", "01/01/2025"),
             "bill_number": raw_report.get("bill_number", 0),
             "weight_details_text": raw_report.get("weight_details_text", ""),
+            "photos": raw_report.get("photos", []),
             "bale1": raw_report["bales"].get("bale1", {}),
             "bale2": raw_report["bales"].get("bale2", {}),
         }
+
+        # Debug: Print photos information
+        print(f"📸 Photos in report: {len(report['photos'])} photos")
+        if report['photos']:
+            for i, photo in enumerate(report['photos']):
+                print(f"   Photo {i+1}: {photo.get('name', 'Unknown')} - Data length: {len(photo.get('data', ''))}")
+        else:
+            print("   No photos found in report data")
 
         # Step 3: Render HTML and convert to PDF
         html_content = templates.get_template("report_template.html").render(report=report)
