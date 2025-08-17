@@ -6,3 +6,4 @@ jinja2
 python-multipart
 weasyprint
 xhtml2pdf
+gunicorn
